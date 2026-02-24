@@ -7,8 +7,12 @@
     "pnpm": ">=10.0.0"
   },
   "scripts": {
+    "lint": "pnpm exec eslint \"./src/**/*.js\"",
+    "format": "pnpm exec prettier --write \"./src/**/*.js\" \"README.md\"",
+    "format:check": "pnpm exec prettier --check \"./src/**/*.js\" \"README.md\"",
     "build": "node -e \"console.log('scheduler: build baseline passed')\"",
     "test": "node --test",
-    "dev": "node src/index.js"
+    "dev": "node src/index.js",
+    "quality": "pnpm lint && pnpm format:check && pnpm test && pnpm build"
   }
 }

@@ -9,7 +9,7 @@
 Task Context: Создай каркасы репозиториев `api`, `ui`, `bot`, `scheduler` с единым baseline: README, лицензия, `.editorconfig`, базовые npm scripts, единые версии Node/PNPM, и шаблон `.env.example`.
 Task DOD: Все 4 репозитория собираются пустым baseline-командой (`install`, `build`, `test`), структура единообразна, есть инструкция запуска локальной среды.
 
-- [ ] [FND-002] Establish shared engineering conventions
+- [x] [FND-002] Establish shared engineering conventions
 Task Context: Зафиксируй единые правила линтинга/форматирования/коммитов/ветвления и naming conventions для API DTO, UI компонентов, bot handlers, scheduler jobs.
 Task DOD: В каждом репозитории подключены и проходят одинаковые quality gates; conventions описаны в документации и применены на примерах.
 

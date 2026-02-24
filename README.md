@@ -37,8 +37,15 @@ pnpm install
 ## Baseline commands
 
 - Install: `pnpm install`
+- Lint all: `pnpm lint`
+- Format check all: `pnpm format:check`
 - Build all: `pnpm build`
 - Test all: `pnpm test`
+- Full quality gate: `pnpm quality`
 - Run all (parallel): `pnpm dev`
 
 На этапе foundation сервисы запускают placeholder entrypoint и печатают bootstrap-сообщения.
+
+## Engineering conventions
+
+Единые правила по линтингу, форматированию, коммитам, ветвлению и naming: `CONVENTIONS.md`.
