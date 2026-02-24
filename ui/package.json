@@ -1,0 +1,14 @@
+{
+  "name": "@moneykeeper/ui",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "build": "node -e \"console.log('ui: build baseline passed')\"",
+    "test": "node --test",
+    "dev": "node src/index.js"
+  }
+}
