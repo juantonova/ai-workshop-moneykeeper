@@ -52,3 +52,13 @@ pnpm install
 ## Engineering conventions
 
 Единые правила по линтингу, форматированию, коммитам, ветвлению и naming: `CONVENTIONS.md`.
+
+## CI
+
+- Основной workflow: `.github/workflows/ci.yml`
+- Reusable template: `.github/workflows/reusable-ci.yml`
+- Для каждого пакета CI выполняет: `install`, `lint`, `test`, `build`
+- Включены:
+  - matrix по Node (`20`, `22`)
+  - проверка lockfile (`pnpm install --frozen-lockfile` + `git diff --exit-code pnpm-lock.yaml`)
+  - upload CI report artifacts и package artifacts (для `api` и `contracts`)

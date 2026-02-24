@@ -1,8 +1,8 @@
 export const OpenAPI = {
-    BASE: '/api/v1',
-    VERSION: '0.1.0',
+    BASE: "/api/v1",
+    VERSION: "0.1.0",
     WITH_CREDENTIALS: false,
-    CREDENTIALS: 'include',
+    CREDENTIALS: "include",
     TOKEN: undefined,
     USERNAME: undefined,
     PASSWORD: undefined,

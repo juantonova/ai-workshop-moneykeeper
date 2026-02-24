@@ -1,0 +1,81 @@
+name: reusable-ci
+
+on:
+  workflow_call:
+    inputs:
+      package_name:
+        description: "Workspace package name (e.g. @moneykeeper/api)"
+        required: true
+        type: string
+      package_slug:
+        description: "Short package identifier for artifact names"
+        required: true
+        type: string
+      artifact_path:
+        description: "Optional artifact path to upload"
+        required: false
+        default: ""
+        type: string
+
+jobs:
+  quality-gate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.6.2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+
+      - name: Install (frozen lockfile)
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify lockfile unchanged
+        run: git diff --exit-code pnpm-lock.yaml
+
+      - name: Lint
+        run: pnpm --filter ${{ inputs.package_name }} run lint
+
+      - name: Test
+        run: pnpm --filter ${{ inputs.package_name }} run test
+
+      - name: Build
+        run: pnpm --filter ${{ inputs.package_name }} run build
+
+      - name: Create CI report
+        run: |
+          cat <<'EOF' > ci-report.md
+          # CI report
+          package: ${{ inputs.package_name }}
+          node: ${{ matrix.node }}
+          lockfile: frozen and unchanged
+          stages: install, lint, test, build
+          status: success
+          EOF
+
+      - name: Upload CI report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-report-${{ inputs.package_slug }}-node-${{ matrix.node }}
+          path: ci-report.md
+
+      - name: Upload package artifact
+        if: ${{ inputs.artifact_path != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-artifact-${{ inputs.package_slug }}-node-${{ matrix.node }}
+          path: ${{ inputs.artifact_path }}
+          if-no-files-found: warn

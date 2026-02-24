@@ -1,0 +1,40 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  api:
+    uses: ./.github/workflows/reusable-ci.yml
+    with:
+      package_name: "@moneykeeper/api"
+      package_slug: "api"
+      artifact_path: "api/openapi/openapi.json"
+
+  ui:
+    uses: ./.github/workflows/reusable-ci.yml
+    with:
+      package_name: "@moneykeeper/ui"
+      package_slug: "ui"
+
+  bot:
+    uses: ./.github/workflows/reusable-ci.yml
+    with:
+      package_name: "@moneykeeper/bot"
+      package_slug: "bot"
+
+  scheduler:
+    uses: ./.github/workflows/reusable-ci.yml
+    with:
+      package_name: "@moneykeeper/scheduler"
+      package_slug: "scheduler"
+
+  contracts:
+    uses: ./.github/workflows/reusable-ci.yml
+    with:
+      package_name: "@expense/contracts"
+      package_slug: "contracts"
+      artifact_path: "contracts/dist"

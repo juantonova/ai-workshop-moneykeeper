@@ -1,5 +1,5 @@
 export type CreateTransactionRequestDto = {
-    type: 'EXPENSE' | 'INCOME' | 'TRANSFER';
+    type: "EXPENSE" | "INCOME" | "TRANSFER";
     amount: number;
     accountId: number;
     categoryId?: number;

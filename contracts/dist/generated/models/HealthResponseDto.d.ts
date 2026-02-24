@@ -1,3 +1,3 @@
 export type HealthResponseDto = {
-    status: 'ok';
+    status: "ok";
 };

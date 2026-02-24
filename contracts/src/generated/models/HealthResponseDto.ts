@@ -3,6 +3,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export type HealthResponseDto = {
-    status: 'ok';
+  status: "ok";
 };
-

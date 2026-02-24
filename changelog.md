@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-02-24 — FND-004
+
+- Добавлен reusable CI шаблон `.github/workflows/reusable-ci.yml` для всех workspace-пакетов.
+- Добавлен общий workflow `.github/workflows/ci.yml`, который запускает quality gates для `api`, `ui`, `bot`, `scheduler`, `contracts`.
+- В CI добавлены: matrix по Node (`20`, `22`), проверка lockfile (`--frozen-lockfile` + diff lockfile), upload отчёта и артефактов.
+- Обновлена документация по CI в `README.md`.
+
 ## 2026-02-24 — FND-003
 
 - Добавлена генерация OpenAPI в `api` (`api/scripts/generate-openapi.js`, `api/openapi/openapi.json`).

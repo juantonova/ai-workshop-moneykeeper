@@ -5,7 +5,7 @@
 export class CancelError extends Error {
     constructor(message) {
         super(message);
-        this.name = 'CancelError';
+        this.name = "CancelError";
     }
     get isCancelled() {
         return true;
@@ -49,13 +49,13 @@ export class CancelablePromise {
                 }
                 this.#cancelHandlers.push(cancelHandler);
             };
-            Object.defineProperty(onCancel, 'isResolved', {
+            Object.defineProperty(onCancel, "isResolved", {
                 get: () => this.#isResolved,
             });
-            Object.defineProperty(onCancel, 'isRejected', {
+            Object.defineProperty(onCancel, "isRejected", {
                 get: () => this.#isRejected,
             });
-            Object.defineProperty(onCancel, 'isCancelled', {
+            Object.defineProperty(onCancel, "isCancelled", {
                 get: () => this.#isCancelled,
             });
             return executor(onResolve, onReject, onCancel);
@@ -85,13 +85,13 @@ export class CancelablePromise {
                 }
             }
             catch (error) {
-                console.warn('Cancellation threw an error', error);
+                console.warn("Cancellation threw an error", error);
                 return;
             }
         }
         this.#cancelHandlers.length = 0;
         if (this.#reject)
-            this.#reject(new CancelError('Request aborted'));
+            this.#reject(new CancelError("Request aborted"));
     }
     get isCancelled() {
         return this.#isCancelled;

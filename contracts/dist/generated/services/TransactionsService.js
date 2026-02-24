@@ -1,5 +1,5 @@
-import { OpenAPI } from '../core/OpenAPI';
-import { request as __request } from '../core/request';
+import { OpenAPI } from "../core/OpenAPI";
+import { request as __request } from "../core/request";
 export class TransactionsService {
     /**
      * Create transaction
@@ -9,10 +9,10 @@ export class TransactionsService {
      */
     static createTransaction(requestBody) {
         return __request(OpenAPI, {
-            method: 'POST',
-            url: '/transactions',
+            method: "POST",
+            url: "/transactions",
             body: requestBody,
-            mediaType: 'application/json',
+            mediaType: "application/json",
         });
     }
 }

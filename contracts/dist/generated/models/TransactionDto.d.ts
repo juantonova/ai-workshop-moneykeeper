@@ -1,6 +1,6 @@
 export type TransactionDto = {
     id: number;
-    type: 'EXPENSE' | 'INCOME' | 'TRANSFER';
+    type: "EXPENSE" | "INCOME" | "TRANSFER";
     amount: number;
     accountId: number;
     categoryId?: number;

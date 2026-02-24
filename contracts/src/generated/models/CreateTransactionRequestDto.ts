@@ -3,10 +3,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export type CreateTransactionRequestDto = {
-    type: 'EXPENSE' | 'INCOME' | 'TRANSFER';
-    amount: number;
-    accountId: number;
-    categoryId?: number;
-    occurredAtUtc: string;
+  type: "EXPENSE" | "INCOME" | "TRANSFER";
+  amount: number;
+  accountId: number;
+  categoryId?: number;
+  occurredAtUtc: string;
 };
-
