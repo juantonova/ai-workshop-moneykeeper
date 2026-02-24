@@ -63,7 +63,7 @@ pnpm up:dev
 - Full quality gate: `pnpm quality`
 - Run all (parallel with env validation + healthcheck): `pnpm dev`
 
-На этапе foundation сервисы запускают placeholder entrypoint и печатают bootstrap-сообщения.
+На этапе foundation сервисы запускают минимальные entrypoint-скрипты для проверки оркестрации.
 
 ## Engineering conventions
 

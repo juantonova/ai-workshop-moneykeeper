@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-02-24 — FND-006
+
+- Удалены временные bootstrap-заглушки из сервисов (`api/ui/bot/scheduler`) и упрощены их `src/index.js` до минимальных entrypoint-скриптов.
+- Перестали хранить в git сгенерированные артефакты (`contracts/dist`, `contracts/src/generated`, `api/openapi/openapi.json`), добавлены соответствующие правила в `.gitignore`.
+- Удалены sample/bootstrap файлы, использовавшиеся только для начальной демонстрации naming/scaffold.
+- Обновлены README-описания сервисов и root README, чтобы убрать ссылки на placeholder bootstrap-поток.
+
 ## 2026-02-24 — FND-005
 
 - Добавлена локальная оркестрация dev-окружения одной командой: `pnpm up:dev`.

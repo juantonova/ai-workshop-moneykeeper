@@ -1,3 +1,1 @@
-const { CreateTransactionDto } = require("./dto/create-transaction.dto");
-
-console.log("[api] baseline scaffold is running", CreateTransactionDto);
+console.log("[api] service entrypoint is running");

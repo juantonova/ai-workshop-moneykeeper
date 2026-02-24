@@ -11,4 +11,4 @@ Service scaffold for future NestJS + Prisma implementation.
 - `pnpm generate:openapi` — generate `openapi/openapi.json`
 - `pnpm build` — generate OpenAPI and run baseline build check
 - `pnpm quality` — run lint + format check + test + build
-- `pnpm dev` — run placeholder entrypoint
+- `pnpm dev` — run service entrypoint

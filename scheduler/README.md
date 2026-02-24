@@ -10,4 +10,4 @@ Service scaffold for future scheduler/cron integration.
 - `pnpm test` — baseline Node test runner
 - `pnpm build` — baseline build check
 - `pnpm quality` — run lint + format check + test + build
-- `pnpm dev` — run placeholder entrypoint
+- `pnpm dev` — run service entrypoint

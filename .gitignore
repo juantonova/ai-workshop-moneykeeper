@@ -1,3 +1,6 @@
 node_modules/
 .env
 .DS_Store
+contracts/dist/
+contracts/src/generated/
+api/openapi/openapi.json

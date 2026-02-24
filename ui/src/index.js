@@ -1,3 +1,1 @@
-const { TransactionForm } = require("./components/TransactionForm");
-
-console.log("[ui] baseline scaffold is running", TransactionForm());
+console.log("[ui] service entrypoint is running");

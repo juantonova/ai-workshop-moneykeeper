@@ -25,7 +25,7 @@ Task DOD: CI проходит во всех репозиториях, ошибк
 Task Context: Добавь удобный локальный сценарий запуска всех сервисов (через root workspace scripts или task runner), включая env validation и health-checkы.
 Task DOD: Одна команда поднимает dev-окружение, документация описывает onboarding нового разработчика за <=15 минут.
 
-- [ ] [FND-006] Stage cleanup: remove temporary bootstrap artifacts
+- [x] [FND-006] Stage cleanup: remove temporary bootstrap artifacts
 Task Context: Удали временные файлы и заглушки, оставшиеся после инициализации (sample configs, лишние шаблоны, неиспользуемые скрипты).
 Task DOD: В репозиториях нет bootstrap-мусора, все оставшиеся файлы реально используются.
 
