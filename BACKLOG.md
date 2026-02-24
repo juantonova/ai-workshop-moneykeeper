@@ -13,7 +13,7 @@ Task DOD: Все 4 репозитория собираются пустым base
 Task Context: Зафиксируй единые правила линтинга/форматирования/коммитов/ветвления и naming conventions для API DTO, UI компонентов, bot handlers, scheduler jobs.
 Task DOD: В каждом репозитории подключены и проходят одинаковые quality gates; conventions описаны в документации и применены на примерах.
 
-- [ ] [FND-003] Set up contracts pipeline from OpenAPI
+- [x] [FND-003] Set up contracts pipeline from OpenAPI
 Task Context: Настрой генерацию OpenAPI из `api`, генерацию TS-клиента и публикацию `@expense/contracts` в GitHub Packages; добавь semver-политику и changelog.
 Task DOD: Pipeline автоматически публикует версию контракта при изменении API, `ui` и `bot` могут импортировать пакет без ручных правок.
 

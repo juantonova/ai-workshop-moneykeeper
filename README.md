@@ -6,6 +6,7 @@
 - `ui` — Mini App frontend (будущий React + Vite)
 - `bot` — Telegram bot (будущий grammY)
 - `scheduler` — scheduler/cron trigger для внутренних job endpoints
+- `contracts` — пакет `@expense/contracts` (генерация TS-клиента из OpenAPI)
 
 ## Baseline requirements
 
@@ -37,6 +38,8 @@ pnpm install
 ## Baseline commands
 
 - Install: `pnpm install`
+- Generate OpenAPI: `pnpm generate:openapi`
+- Generate contracts package: `pnpm generate:contracts`
 - Lint all: `pnpm lint`
 - Format check all: `pnpm format:check`
 - Build all: `pnpm build`

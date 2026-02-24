@@ -11,3 +11,9 @@ Service scaffold for future grammY Telegram bot implementation.
 - `pnpm build` — baseline build check
 - `pnpm quality` — run lint + format check + test + build
 - `pnpm dev` — run placeholder entrypoint
+
+## Contracts package
+
+`bot` consumes shared API contracts via dependency:
+
+- `@expense/contracts` (`workspace:*`)

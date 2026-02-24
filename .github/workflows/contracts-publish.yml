@@ -1,0 +1,52 @@
+name: contracts-publish
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "api/**"
+      - "contracts/**"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/contracts-publish.yml"
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.6.2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate OpenAPI and contracts
+        run: |
+          pnpm --filter @moneykeeper/api run generate:openapi
+          pnpm --filter @expense/contracts run build
+
+      - name: Set CI package version
+        run: pnpm --filter @expense/contracts run set:ci-version
+        env:
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+
+      - name: Publish @expense/contracts
+        run: pnpm --filter @expense/contracts publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

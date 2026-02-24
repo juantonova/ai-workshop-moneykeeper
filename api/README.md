@@ -8,6 +8,7 @@ Service scaffold for future NestJS + Prisma implementation.
 - `pnpm format` — format sources and README
 - `pnpm format:check` — verify formatting
 - `pnpm test` — baseline Node test runner
-- `pnpm build` — baseline build check
+- `pnpm generate:openapi` — generate `openapi/openapi.json`
+- `pnpm build` — generate OpenAPI and run baseline build check
 - `pnpm quality` — run lint + format check + test + build
 - `pnpm dev` — run placeholder entrypoint

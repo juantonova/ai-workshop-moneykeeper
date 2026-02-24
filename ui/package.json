@@ -14,5 +14,8 @@
     "test": "node --test",
     "dev": "node src/index.js",
     "quality": "pnpm lint && pnpm format:check && pnpm test && pnpm build"
+  },
+  "dependencies": {
+    "@expense/contracts": "workspace:*"
   }
 }
