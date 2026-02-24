@@ -35,9 +35,25 @@ cp .env.example .env
 pnpm install
 ```
 
+4. Проверьте env и baseline health:
+
+```bash
+pnpm validate:env
+pnpm healthcheck
+```
+
+5. Поднимите локальное dev-окружение одной командой:
+
+```bash
+pnpm up:dev
+```
+
 ## Baseline commands
 
 - Install: `pnpm install`
+- Validate env: `pnpm validate:env`
+- Healthcheck: `pnpm healthcheck`
+- Start full local dev orchestration: `pnpm up:dev`
 - Generate OpenAPI: `pnpm generate:openapi`
 - Generate contracts package: `pnpm generate:contracts`
 - Lint all: `pnpm lint`
@@ -45,7 +61,7 @@ pnpm install
 - Build all: `pnpm build`
 - Test all: `pnpm test`
 - Full quality gate: `pnpm quality`
-- Run all (parallel): `pnpm dev`
+- Run all (parallel with env validation + healthcheck): `pnpm dev`
 
 На этапе foundation сервисы запускают placeholder entrypoint и печатают bootstrap-сообщения.
 

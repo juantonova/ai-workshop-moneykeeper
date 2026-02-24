@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-02-24 — FND-005
+
+- Добавлена локальная оркестрация dev-окружения одной командой: `pnpm up:dev`.
+- Добавлена валидация `.env` (`scripts/validate-env.cjs`, команда `pnpm validate:env`) с проверкой обязательных переменных и корректности портов.
+- Добавлен baseline health-check (`scripts/healthcheck.cjs`, команда `pnpm healthcheck`) для `api/ui/bot/scheduler`.
+- Root-скрипт `pnpm dev` теперь запускает оркестрацию с env validation и health-check перед стартом сервисов.
+- Обновлен onboarding в `README.md` для сценария запуска локальной среды за <=15 минут.
+
 ## 2026-02-24 — FND-004
 
 - Добавлен reusable CI шаблон `.github/workflows/reusable-ci.yml` для всех workspace-пакетов.

@@ -21,7 +21,7 @@ Task DOD: Pipeline автоматически публикует версию к
 Task Context: Сделай reusable CI workflow: install, lint, test, build, artifact/report; добавь матрицу для Node версии и проверку lockfile.
 Task DOD: CI проходит во всех репозиториях, ошибки падают на PR, есть кэш зависимостей и отчетность по этапам.
 
-- [ ] [FND-005] Add local developer orchestration
+- [x] [FND-005] Add local developer orchestration
 Task Context: Добавь удобный локальный сценарий запуска всех сервисов (через root workspace scripts или task runner), включая env validation и health-checkы.
 Task DOD: Одна команда поднимает dev-окружение, документация описывает onboarding нового разработчика за <=15 минут.
 

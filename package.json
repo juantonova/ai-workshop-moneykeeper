@@ -8,6 +8,9 @@
   },
   "scripts": {
     "install:all": "pnpm install",
+    "validate:env": "node ./scripts/validate-env.cjs",
+    "healthcheck": "node ./scripts/healthcheck.cjs",
+    "up:dev": "pnpm run validate:env && pnpm run healthcheck && pnpm -r --parallel dev",
     "generate:openapi": "pnpm --filter @moneykeeper/api run generate:openapi",
     "generate:contracts": "pnpm --filter @expense/contracts run build",
     "lint": "pnpm -r lint",
@@ -16,7 +19,7 @@
     "build": "pnpm -r build",
     "test": "pnpm -r test",
     "quality": "pnpm lint && pnpm format:check && pnpm test && pnpm build",
-    "dev": "pnpm -r --parallel dev"
+    "dev": "pnpm run up:dev"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
