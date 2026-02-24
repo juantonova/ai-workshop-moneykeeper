@@ -1,0 +1,287 @@
+#!/usr/bin/env node
+
+const fs = require("node:fs/promises");
+const path = require("node:path");
+const { spawnSync } = require("node:child_process");
+
+const ROOT = process.cwd();
+
+const IGNORED_DIRS = new Set([
+  ".git",
+  ".idea",
+  ".vscode",
+  "node_modules",
+  "dist",
+  "build",
+  "coverage",
+  ".next",
+  ".turbo",
+]);
+
+const BINARY_EXTENSIONS = new Set([
+  ".png",
+  ".jpg",
+  ".jpeg",
+  ".gif",
+  ".webp",
+  ".ico",
+  ".pdf",
+  ".zip",
+  ".gz",
+  ".tar",
+  ".tgz",
+  ".mp3",
+  ".mp4",
+  ".mov",
+  ".avi",
+  ".woff",
+  ".woff2",
+  ".ttf",
+  ".eot",
+  ".jar",
+  ".exe",
+  ".dylib",
+  ".so",
+  ".bin",
+  ".lockb",
+]);
+
+const SOURCE_EXTENSIONS = new Set([
+  ".js",
+  ".jsx",
+  ".ts",
+  ".tsx",
+  ".mjs",
+  ".cjs",
+  ".py",
+  ".go",
+  ".java",
+  ".kt",
+  ".rs",
+  ".php",
+  ".rb",
+  ".swift",
+  ".scala",
+  ".cs",
+  ".cpp",
+  ".cc",
+  ".c",
+  ".h",
+  ".hpp",
+  ".sql",
+  ".sh",
+  ".zsh",
+  ".bash",
+]);
+
+const DOC_EXTENSIONS = new Set([".md", ".txt", ".rst"]);
+const SLASH_COMMENT_EXTENSIONS = new Set([
+  ".js",
+  ".jsx",
+  ".ts",
+  ".tsx",
+  ".mjs",
+  ".cjs",
+  ".java",
+  ".kt",
+  ".go",
+  ".rs",
+  ".c",
+  ".cc",
+  ".cpp",
+  ".h",
+  ".hpp",
+  ".swift",
+  ".scala",
+  ".cs",
+  ".php",
+]);
+const HASH_COMMENT_EXTENSIONS = new Set([
+  ".py",
+  ".sh",
+  ".zsh",
+  ".bash",
+  ".yaml",
+  ".yml",
+  ".toml",
+  ".ini",
+  ".env",
+]);
+
+const SQL_COMMENT_EXTENSIONS = new Set([".sql"]);
+const DOTFILES_WITHOUT_EXTENSION = new Set([".env", ".gitignore"]);
+
+function toKb(bytes) {
+  return `${(bytes / 1024).toFixed(2)} KB`;
+}
+
+function isSpecialDoc(relativePath) {
+  const normalized = relativePath.replace(/\\/g, "/");
+  const fileName = path.basename(normalized).toLowerCase();
+
+  if (normalized.startsWith("ADR/")) return "adr";
+  if (fileName === "techspec.md") return "techspec";
+  if (fileName === "prd.md" || fileName === "prd.md".toLowerCase()) return "prd";
+  if (fileName === "changelog.md") return "changelog";
+  if (fileName === "agents.md") return "agents";
+  return null;
+}
+
+function classify(relativePath) {
+  const special = isSpecialDoc(relativePath);
+  if (special) return special;
+
+  const ext = path.extname(relativePath).toLowerCase();
+  if (SOURCE_EXTENSIONS.has(ext)) return "source";
+  if (DOC_EXTENSIONS.has(ext)) return "docs";
+  if (ext === ".json") return "config-json";
+  if (!ext && DOTFILES_WITHOUT_EXTENSION.has(path.basename(relativePath))) return "config";
+  return ext ? `ext:${ext}` : "other";
+}
+
+function stripBlockComments(text) {
+  return text
+    .replace(/\/\*[\s\S]*?\*\//g, " ")
+    .replace(/<!--[\s\S]*?-->/g, " ");
+}
+
+function stripLineComments(text, ext) {
+  const lines = text.split("\n");
+  return lines
+    .map((line) => {
+      let next = line;
+
+      if (SLASH_COMMENT_EXTENSIONS.has(ext)) {
+        next = next.replace(/(^|[^:\\])\/\/.*$/g, "$1");
+      }
+      if (HASH_COMMENT_EXTENSIONS.has(ext)) {
+        next = next.replace(/\s#.*$/g, "");
+        if (next.trimStart().startsWith("#")) next = "";
+      }
+      if (SQL_COMMENT_EXTENSIONS.has(ext)) {
+        next = next.replace(/\s--.*$/g, "");
+        if (next.trimStart().startsWith("--")) next = "";
+      }
+
+      next = next.replace(/\s+/g, " ").trim();
+      return next;
+    })
+    .filter(Boolean)
+    .join("\n");
+}
+
+function dehydrate(content, ext) {
+  const normalized = content.replace(/\r\n/g, "\n");
+  const noBlocks = stripBlockComments(normalized);
+  return stripLineComments(noBlocks, ext);
+}
+
+async function isTextFile(absolutePath, ext) {
+  if (BINARY_EXTENSIONS.has(ext)) return false;
+
+  try {
+    const file = await fs.readFile(absolutePath);
+    for (let i = 0; i < Math.min(file.length, 512); i += 1) {
+      if (file[i] === 0) return false;
+    }
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function collectFiles(dir) {
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+  const files = [];
+
+  for (const entry of entries) {
+    if (entry.name.startsWith(".") && !DOTFILES_WITHOUT_EXTENSION.has(entry.name)) {
+      if (entry.name !== ".github") continue;
+    }
+
+    const absolutePath = path.join(dir, entry.name);
+    const relativePath = path.relative(ROOT, absolutePath);
+
+    if (entry.isDirectory()) {
+      if (IGNORED_DIRS.has(entry.name)) continue;
+      const nested = await collectFiles(absolutePath);
+      files.push(...nested);
+      continue;
+    }
+
+    if (!entry.isFile()) continue;
+
+    const ext = path.extname(entry.name).toLowerCase();
+    if (!(await isTextFile(absolutePath, ext))) continue;
+
+    files.push({ absolutePath, relativePath, ext });
+  }
+
+  return files;
+}
+
+function copyToClipboard(text) {
+  const cmd = process.platform === "darwin" ? "pbcopy" : "xclip";
+  const args = process.platform === "darwin" ? [] : ["-selection", "clipboard"];
+  const result = spawnSync(cmd, args, { input: text, encoding: "utf8" });
+  if (result.error || result.status !== 0) {
+    throw new Error(`Clipboard command failed: ${cmd}`);
+  }
+}
+
+async function main() {
+  const printBlob = process.argv.includes("--print");
+  const files = (await collectFiles(ROOT)).sort((a, b) =>
+    a.relativePath.localeCompare(b.relativePath),
+  );
+
+  const chunks = [];
+  const stats = new Map();
+  let totalBytes = 0;
+  let totalFiles = 0;
+
+  for (const file of files) {
+    const raw = await fs.readFile(file.absolutePath, "utf8");
+    const dehydrated = dehydrate(raw, file.ext);
+    if (!dehydrated) continue;
+
+    const chunk = `FILE ${file.relativePath}\n${dehydrated}`;
+    chunks.push(chunk);
+
+    const bytes = Buffer.byteLength(chunk, "utf8");
+    totalBytes += bytes;
+    totalFiles += 1;
+
+    const type = classify(file.relativePath);
+    const entry = stats.get(type) || { files: 0, bytes: 0 };
+    entry.files += 1;
+    entry.bytes += bytes;
+    stats.set(type, entry);
+  }
+
+  const merged = chunks.join("\n\n");
+  copyToClipboard(merged);
+
+  console.log("blob generation complete");
+  console.log(`files included: ${totalFiles}`);
+  console.log(`total size: ${totalBytes} bytes (${toKb(totalBytes)})`);
+  console.log("by type:");
+
+  for (const [type, entry] of [...stats.entries()].sort((a, b) => b[1].bytes - a[1].bytes)) {
+    console.log(
+      `  - ${type}: ${entry.files} files, ${entry.bytes} bytes (${toKb(entry.bytes)})`,
+    );
+  }
+
+  console.log("clipboard: updated");
+  if (printBlob) {
+    console.log("\n--- dehydrated blob ---\n");
+    process.stdout.write(merged);
+    process.stdout.write("\n");
+  }
+}
+
+main().catch((error) => {
+  console.error(error.message);
+  process.exitCode = 1;
+});
