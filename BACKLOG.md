@@ -55,7 +55,7 @@ Task DOD: Контракт вынесен в статический source, env-
 Task Context: Спроектируй и реализуй модели `User`, `Account`, `Category`, `Transaction`, `RefreshSession`, связи и индексы с учетом single-user product model из PRD.
 Task DOD: Prisma schema и первая миграция применяются локально, структура покрывает CRUD и дальнейшие auth/snapshot расширения.
 
-- [ ] [API-002] Build accounts and categories CRUD endpoints
+- [x] [API-002] Build accounts and categories CRUD endpoints
 Task Context: Реализуй `api/v1` endpoints для счетов и категорий (включая базовые категории и custom), валидацию DTO и error mapping.
 Task DOD: Контракты и e2e тесты подтверждают CRUD, есть автосоздание `Основная карта (RUB)` и обязательный opening balance в onboarding-потоке.
 

@@ -42,6 +42,327 @@
         }
       }
     },
+    "/accounts": {
+      "get": {
+        "tags": ["Accounts"],
+        "summary": "Get all accounts",
+        "operationId": "getAccounts",
+        "responses": {
+          "200": {
+            "description": "List of accounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AccountDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Accounts"],
+        "summary": "Create account",
+        "operationId": "createAccount",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAccountDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Account created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/balances": {
+      "get": {
+        "tags": ["Accounts"],
+        "summary": "Get account balances",
+        "operationId": "getAccountBalances",
+        "responses": {
+          "200": {
+            "description": "List of account balances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BalanceDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{id}": {
+      "patch": {
+        "tags": ["Accounts"],
+        "summary": "Update account name",
+        "operationId": "updateAccount",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAccountDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Account updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Account not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/accounts/{id}/archive": {
+      "post": {
+        "tags": ["Accounts"],
+        "summary": "Archive account",
+        "operationId": "archiveAccount",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Account archived",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Account not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Account balance not zero",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Get categories",
+        "operationId": "getCategories",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["expense", "income"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CategoryDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Categories"],
+        "summary": "Create category",
+        "operationId": "createCategory",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Category created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Category already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "patch": {
+        "tags": ["Categories"],
+        "summary": "Update category name (expense only)",
+        "operationId": "updateCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCategoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Category updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Cannot rename income category",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Category name conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/transactions": {
       "post": {
         "tags": [
@@ -186,6 +507,81 @@
             "type": "string",
             "format": "date-time"
           }
+        }
+      },
+      "AccountDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "userId", "name", "currency", "type", "archived", "createdAtUtc", "updatedAtUtc"],
+        "properties": {
+          "id": {"type": "integer", "minimum": 1},
+          "userId": {"type": "integer", "minimum": 1},
+          "name": {"type": "string"},
+          "currency": {"type": "string", "enum": ["RUB", "USD", "EUR", "KGS"]},
+          "type": {"type": "string", "enum": ["CASH", "INVESTMENT"]},
+          "archived": {"type": "boolean"},
+          "createdAtUtc": {"type": "string", "format": "date-time"},
+          "updatedAtUtc": {"type": "string", "format": "date-time"}
+        }
+      },
+      "CreateAccountDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "currency", "type"],
+        "properties": {
+          "name": {"type": "string"},
+          "currency": {"type": "string", "enum": ["RUB", "USD", "EUR", "KGS"]},
+          "type": {"type": "string", "enum": ["CASH", "INVESTMENT"]}
+        }
+      },
+      "UpdateAccountDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name"],
+        "properties": {
+          "name": {"type": "string"}
+        }
+      },
+      "BalanceDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["accountId", "accountName", "currency", "balance"],
+        "properties": {
+          "accountId": {"type": "integer", "minimum": 1},
+          "accountName": {"type": "string"},
+          "currency": {"type": "string", "enum": ["RUB", "USD", "EUR", "KGS"]},
+          "balance": {"type": "string", "description": "Balance as decimal string with 2 decimal places"}
+        }
+      },
+      "CategoryDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "userId", "type", "name", "normalizedName", "createdAtUtc", "updatedAtUtc"],
+        "properties": {
+          "id": {"type": "integer", "minimum": 1},
+          "userId": {"type": "integer", "minimum": 1},
+          "type": {"type": "string", "enum": ["EXPENSE", "INCOME"]},
+          "name": {"type": "string"},
+          "normalizedName": {"type": "string"},
+          "createdAtUtc": {"type": "string", "format": "date-time"},
+          "updatedAtUtc": {"type": "string", "format": "date-time"}
+        }
+      },
+      "CreateCategoryDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "name"],
+        "properties": {
+          "type": {"type": "string", "enum": ["EXPENSE", "INCOME"]},
+          "name": {"type": "string"}
+        }
+      },
+      "UpdateCategoryDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name"],
+        "properties": {
+          "name": {"type": "string"}
         }
       },
       "ErrorResponseDto": {

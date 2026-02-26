@@ -1,5 +1,43 @@
 # Changelog
 
+## 2026-02-26 — API-002
+
+- Реализовано полноценное NestJS приложение в `api` с TypeScript:
+  - Создан `tsconfig.json` с поддержкой декораторов и генерации в `dist`.
+  - Реализован entry point `src/main.ts` с настройкой CORS и ValidationPipe.
+  - Создан `AppModule` как корневой модуль приложения.
+- Добавлен `PrismaModule` с глобальным `PrismaService` для dependency injection:
+  - `PrismaService` реализован с использованием composition pattern для работы с Prisma Client 7.x.
+  - Lifecycle hooks `onModuleInit` и `onModuleDestroy` для управления подключением к БД.
+- Реализован `AccountsModule` с полным CRUD функционалом:
+  - `GET /api/v1/accounts` — получение всех счетов пользователя.
+  - `POST /api/v1/accounts` — создание нового счета (валидация имени, валюты, типа).
+  - `PATCH /api/v1/accounts/:id` — изменение имени счета.
+  - `POST /api/v1/accounts/:id/archive` — архивирование счета (с проверкой нулевого баланса).
+  - `GET /api/v1/accounts/balances` — получение балансов активных счетов.
+  - DTOs с class-validator для валидации входных данных.
+  - Бизнес-логика расчета баланса на основе транзакций (OPENING_BALANCE, INCOME, EXPENSE, TRANSFER).
+- Реализован `CategoriesModule` с CRUD функционалом:
+  - `GET /api/v1/categories?type=expense|income` — получение категорий с фильтрацией по типу.
+  - `POST /api/v1/categories` — создание новой категории (с проверкой уникальности по normalized name).
+  - `PATCH /api/v1/categories/:id` — переименование категории (только для EXPENSE типа).
+  - Нормализация имен категорий (trim + lowercase) для обеспечения уникальности.
+  - Валидация: income-категории нельзя переименовывать.
+- Добавлен `HealthController` для endpoint `/api/v1/health`.
+- Реализован глобальный `HttpExceptionFilter` для унифицированной обработки ошибок:
+  - Все исключения преобразуются в `ErrorResponseDto` с полями `code`, `message`, `details`.
+  - Автоматический маппинг HTTP статус-кодов в бизнес-коды ошибок.
+- Обновлен OpenAPI контракт `api/openapi/openapi.source.json`:
+  - Добавлены все endpoints для accounts и categories.
+  - Определены schemas: `AccountDto`, `CreateAccountDto`, `UpdateAccountDto`, `BalanceDto`, `CategoryDto`, `CreateCategoryDto`, `UpdateCategoryDto`.
+- Обновлены зависимости в `api/package.json`:
+  - Добавлены `class-validator`, `class-transformer` для валидации.
+  - Добавлены dev-зависимости: `@nestjs/testing`, `@types/express`, `tsx` для тестов.
+- Настроены build scripts для TypeScript компиляции.
+- Добавлен baseline test для проверки сборки.
+- Применена миграция Prisma к локальной БД.
+- Задача `API-002` готова к отметке выполненной в `BACKLOG.md`.
+
 ## 2026-02-26 — API-001
 
 - Добавлен Prisma в `api` и инициализирована конфигурация `api/prisma.config.ts` для SQLite datasource.
