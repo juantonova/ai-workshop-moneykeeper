@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-02-26 — API-001
+
+- Добавлен Prisma в `api` и инициализирована конфигурация `api/prisma.config.ts` для SQLite datasource.
+- Реализована начальная доменная схема в `api/prisma/schema.prisma`:
+  - сущности `User`, `RefreshSession`, `Account`, `Category`, `Transaction`;
+  - доменные enum-типы (`AccountCurrency`, `AccountType`, `CategoryType`, `TransactionType`, `TransactionStatus`);
+  - связи и индексы для user-bound CRUD, истории транзакций и single active refresh session.
+- Создана и применена первая миграция `api/prisma/migrations/20260226104644_init_core_domain/migration.sql`.
+- Обновлены скрипты `api/package.json` для управления Prisma (`prisma:generate`, `prisma:migrate:dev`, `prisma:migrate:deploy`) и включена генерация Prisma Client в `build`.
+- Обновлен `api/.env.example` с `DATABASE_URL` для локального запуска Prisma.
+- Задача `API-001` отмечена выполненной в `BACKLOG.md`.
+
 ## 2026-02-26 — FND-011
 
 - Вынесен source of truth OpenAPI в `api/openapi/openapi.source.json`; генератор `api/scripts/generate-openapi.js` упрощен до чтения source и записи артефакта.

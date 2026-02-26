@@ -10,11 +10,29 @@
     "lint": "pnpm exec eslint \"./src/**/*.js\"",
     "format": "pnpm exec prettier --write \"./src/**/*.js\" \"README.md\"",
     "format:check": "pnpm exec prettier --check \"./src/**/*.js\" \"README.md\"",
+    "prisma:generate": "pnpm exec prisma generate",
+    "prisma:migrate:dev": "pnpm exec prisma migrate dev",
+    "prisma:migrate:deploy": "pnpm exec prisma migrate deploy",
     "codegen:openapi": "node ./scripts/generate-openapi.js",
     "generate:openapi": "pnpm run codegen:openapi",
-    "build": "pnpm run codegen:openapi && node -e \"console.log('api: build baseline passed')\"",
+    "build": "pnpm run prisma:generate && pnpm run codegen:openapi && node -e \"console.log('api: build baseline passed')\"",
     "test": "node --test",
     "dev": "node src/index.js",
     "quality": "pnpm lint && pnpm format:check && pnpm test && pnpm build"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.14",
+    "@nestjs/core": "^11.1.14",
+    "@nestjs/platform-express": "^11.1.14",
+    "@nestjs/swagger": "^11.2.6",
+    "@prisma/client": "^7.4.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.1",
+    "prisma": "^7.4.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
   }
 }

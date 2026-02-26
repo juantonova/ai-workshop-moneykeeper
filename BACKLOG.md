@@ -51,7 +51,7 @@ Task DOD: Контракт вынесен в статический source, env-
 
 ## Stage 2. API Core (NestJS + Prisma + SQLite)
 
-- [ ] [API-001] Implement initial Prisma schema for core domain
+- [x] [API-001] Implement initial Prisma schema for core domain
 Task Context: Спроектируй и реализуй модели `User`, `Account`, `Category`, `Transaction`, `RefreshSession`, связи и индексы с учетом single-user product model из PRD.
 Task DOD: Prisma schema и первая миграция применяются локально, структура покрывает CRUD и дальнейшие auth/snapshot расширения.
 

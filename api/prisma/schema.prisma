@@ -1,0 +1,134 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum AccountCurrency {
+  RUB
+  USD
+  EUR
+  KGS
+}
+
+enum AccountType {
+  CASH
+  INVESTMENT
+}
+
+enum CategoryType {
+  EXPENSE
+  INCOME
+}
+
+enum TransactionType {
+  EXPENSE
+  INCOME
+  TRANSFER
+  OPENING_BALANCE
+}
+
+enum TransactionStatus {
+  ACTIVE
+  VOID
+}
+
+model User {
+  id                    Int              @id @default(autoincrement())
+  telegramUserId        String           @unique @map("telegram_user_id")
+  onboardingStartedAtUtc DateTime?       @map("onboarding_started_at_utc")
+  onboardingCompleted   Boolean          @default(false) @map("onboarding_completed")
+  recoveryCodeHash      String?          @map("recovery_code_hash")
+  createdAtUtc          DateTime         @default(now()) @map("created_at_utc")
+  updatedAtUtc          DateTime         @updatedAt @map("updated_at_utc")
+  accounts              Account[]
+  categories            Category[]
+  transactions          Transaction[]
+  refreshSessions       RefreshSession[]
+
+  @@map("users")
+}
+
+model RefreshSession {
+  id               Int      @id @default(autoincrement())
+  userId           Int      @unique @map("user_id")
+  refreshTokenHash String   @map("refresh_token_hash")
+  expiresAtUtc     DateTime @map("expires_at_utc")
+  rotatedAtUtc     DateTime @map("rotated_at_utc")
+  createdAtUtc     DateTime @default(now()) @map("created_at_utc")
+  updatedAtUtc     DateTime @updatedAt @map("updated_at_utc")
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAtUtc])
+  @@map("refresh_sessions")
+}
+
+model Account {
+  id                     Int           @id @default(autoincrement())
+  userId                 Int           @map("user_id")
+  name                   String
+  currency               AccountCurrency
+  type                   AccountType   @default(CASH)
+  archived               Boolean       @default(false)
+  createdAtUtc           DateTime      @default(now()) @map("created_at_utc")
+  updatedAtUtc           DateTime      @updatedAt @map("updated_at_utc")
+  user                   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountTransactions    Transaction[] @relation("TransactionAccount")
+  fromAccountTransactions Transaction[] @relation("TransactionFromAccount")
+  toAccountTransactions  Transaction[] @relation("TransactionToAccount")
+
+  @@index([userId])
+  @@index([userId, archived])
+  @@map("accounts")
+}
+
+model Category {
+  id             Int           @id @default(autoincrement())
+  userId         Int           @map("user_id")
+  type           CategoryType
+  name           String
+  normalizedName String        @map("normalized_name")
+  createdAtUtc   DateTime      @default(now()) @map("created_at_utc")
+  updatedAtUtc   DateTime      @updatedAt @map("updated_at_utc")
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions   Transaction[]
+
+  @@unique([userId, type, normalizedName])
+  @@index([userId, type])
+  @@map("categories")
+}
+
+model Transaction {
+  id            Int               @id @default(autoincrement())
+  userId        Int               @map("user_id")
+  type          TransactionType
+  status        TransactionStatus @default(ACTIVE)
+  occurredAtUtc DateTime          @map("occurred_at_utc")
+  createdAtUtc  DateTime          @default(now()) @map("created_at_utc")
+  updatedAtUtc  DateTime          @updatedAt @map("updated_at_utc")
+  accountId     Int?              @map("account_id")
+  categoryId    Int?              @map("category_id")
+  fromAccountId Int?              @map("from_account_id")
+  toAccountId   Int?              @map("to_account_id")
+  amount        Decimal?
+  amountFrom    Decimal?          @map("amount_from")
+  amountTo      Decimal?          @map("amount_to")
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  account       Account?          @relation("TransactionAccount", fields: [accountId], references: [id], onDelete: Restrict)
+  category      Category?         @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  fromAccount   Account?          @relation("TransactionFromAccount", fields: [fromAccountId], references: [id], onDelete: Restrict)
+  toAccount     Account?          @relation("TransactionToAccount", fields: [toAccountId], references: [id], onDelete: Restrict)
+
+  @@index([userId, occurredAtUtc])
+  @@index([userId, type, occurredAtUtc])
+  @@index([userId, status, occurredAtUtc])
+  @@index([accountId])
+  @@index([categoryId])
+  @@index([fromAccountId])
+  @@index([toAccountId])
+  @@map("transactions")
+}
