@@ -1,106 +1,17 @@
 const fs = require("node:fs");
 const path = require("node:path");
 
-const openApiDocument = {
-  openapi: "3.0.3",
-  info: {
-    title: "Moneykeeper API",
-    version: "0.1.0",
-    description: "Generated contract source of truth for API clients.",
-  },
-  servers: [{ url: "/api/v1" }],
-  paths: {
-    "/health": {
-      get: {
-        tags: ["Health"],
-        summary: "Health check",
-        operationId: "getHealth",
-        responses: {
-          "200": {
-            description: "Service is healthy",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/HealthResponseDto" },
-              },
-            },
-          },
-        },
-      },
-    },
-    "/transactions": {
-      post: {
-        tags: ["Transactions"],
-        summary: "Create transaction",
-        operationId: "createTransaction",
-        requestBody: {
-          required: true,
-          content: {
-            "application/json": {
-              schema: { $ref: "#/components/schemas/CreateTransactionRequestDto" },
-            },
-          },
-        },
-        responses: {
-          "201": {
-            description: "Transaction created",
-            content: {
-              "application/json": {
-                schema: { $ref: "#/components/schemas/TransactionDto" },
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-  components: {
-    schemas: {
-      HealthResponseDto: {
-        type: "object",
-        additionalProperties: false,
-        required: ["status"],
-        properties: {
-          status: { type: "string", enum: ["ok"] },
-        },
-      },
-      CreateTransactionRequestDto: {
-        type: "object",
-        additionalProperties: false,
-        required: ["type", "amount", "accountId", "occurredAtUtc"],
-        properties: {
-          type: { type: "string", enum: ["EXPENSE", "INCOME", "TRANSFER"] },
-          amount: { type: "number", minimum: 0.01 },
-          accountId: { type: "integer", minimum: 1 },
-          categoryId: { type: "integer", minimum: 1 },
-          occurredAtUtc: {
-            type: "string",
-            format: "date-time",
-          },
-        },
-      },
-      TransactionDto: {
-        type: "object",
-        additionalProperties: false,
-        required: ["id", "type", "amount", "accountId", "occurredAtUtc"],
-        properties: {
-          id: { type: "integer", minimum: 1 },
-          type: { type: "string", enum: ["EXPENSE", "INCOME", "TRANSFER"] },
-          amount: { type: "number", minimum: 0.01 },
-          accountId: { type: "integer", minimum: 1 },
-          categoryId: { type: "integer", minimum: 1 },
-          occurredAtUtc: {
-            type: "string",
-            format: "date-time",
-          },
-        },
-      },
-    },
-  },
-};
+const openApiDir = path.resolve(__dirname, "../openapi");
+const sourcePath = path.join(openApiDir, "openapi.source.json");
+const outputPath = path.join(openApiDir, "openapi.json");
 
-const outputDir = path.resolve(__dirname, "../openapi");
-const outputPath = path.join(outputDir, "openapi.json");
+if (!fs.existsSync(sourcePath)) {
+  throw new Error(`[api] OpenAPI source is missing: ${sourcePath}`);
+}
 
-fs.mkdirSync(outputDir, { recursive: true });
+const sourceRaw = fs.readFileSync(sourcePath, "utf8");
+const openApiDocument = JSON.parse(sourceRaw);
+
+fs.mkdirSync(openApiDir, { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(openApiDocument, null, 2) + "\n", "utf8");
-console.log(`[api] OpenAPI generated: ${outputPath}`);
+console.log(`[api] OpenAPI generated from source: ${outputPath}`);

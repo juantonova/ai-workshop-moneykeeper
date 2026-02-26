@@ -1,1 +1,1 @@
-console.log("[ui] service entrypoint is running");
+// Stage 2 bootstrap placeholder.

@@ -10,8 +10,9 @@
     "lint": "pnpm exec eslint \"./src/**/*.js\"",
     "format": "pnpm exec prettier --write \"./src/**/*.js\" \"README.md\"",
     "format:check": "pnpm exec prettier --check \"./src/**/*.js\" \"README.md\"",
-    "generate:openapi": "node ./scripts/generate-openapi.js",
-    "build": "pnpm run generate:openapi && node -e \"console.log('api: build baseline passed')\"",
+    "codegen:openapi": "node ./scripts/generate-openapi.js",
+    "generate:openapi": "pnpm run codegen:openapi",
+    "build": "pnpm run codegen:openapi && node -e \"console.log('api: build baseline passed')\"",
     "test": "node --test",
     "dev": "node src/index.js",
     "quality": "pnpm lint && pnpm format:check && pnpm test && pnpm build"

@@ -1,1 +1,1 @@
-console.log("[bot] service entrypoint is running");
+// Stage 2 bootstrap placeholder.

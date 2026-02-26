@@ -50,8 +50,7 @@ jobs:
 
       - name: Generate OpenAPI and contracts
         run: |
-          pnpm --filter @moneykeeper/api run generate:openapi
-          pnpm --filter @expense/contracts run build
+          pnpm run generate:contracts
 
       - name: Set CI package version
         run: pnpm --filter @expense/contracts run set:ci-version

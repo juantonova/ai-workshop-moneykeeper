@@ -1,0 +1,9 @@
+{
+  "basePort": 3000,
+  "offsets": {
+    "API_PORT": 0,
+    "BOT_PORT": 1,
+    "SCHEDULER_PORT": 2,
+    "UI_PORT": 2173
+  }
+}

@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-02-26 — FND-011
+
+- Вынесен source of truth OpenAPI в `api/openapi/openapi.source.json`; генератор `api/scripts/generate-openapi.js` упрощен до чтения source и записи артефакта.
+- Ослаблена связность `contracts` и `api`: сборка contracts больше не знает, как именно генерируется OpenAPI в API; orchestration перенесена в root scripts/workflow.
+- Стандартизированы скрипты генерации (`codegen:*`), при этом сохранены `generate:*` alias для обратной совместимости.
+- Env-валидация переведена на schema-based подход с `dotenv.parse`, добавлен единый конфиг портов `configs/ports.json` и тесты `scripts/validate-env.test.cjs`.
+- Healthcheck разделен на baseline и runtime-режимы (`pnpm healthcheck:runtime`) для явного перехода к проверкам `/health`.
+- В OpenAPI добавлен `ErrorResponseDto` и типизированные error-responses для ключевых endpoint-ов.
+- Принято архитектурное решение в ADR:
+  - `ADR-0011-review-hardening-openapi-env-orchestration.md`.
+
 ## 2026-02-24 — FND-010
 
 - Финально выровнены docs/scripts/CI quality gates после foundation-этапа.

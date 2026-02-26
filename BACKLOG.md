@@ -45,6 +45,10 @@ Task DOD: Security checklist закрыт, лишние permissions убраны
 Task Context: Приведи документацию, скрипты и quality gates к единому состоянию после foundation-этапа.
 Task DOD: Нет рассинхронизации между README/CI/scripts, линтер и форматтер проходят без исключений.
 
+- [x] [FND-011] Review hardening: contracts source, env schema, orchestration decoupling
+Task Context: Устранить замечания ревью по `OpenAPI source of truth`, валидации `.env`, связности `contracts`/`api`, healthcheck стратегии и стандартизации codegen-скриптов.
+Task DOD: Контракт вынесен в статический source, env-валидация основана на схеме и общем конфиге портов, orchestration генерации выполняется из root, добавлены тесты на env validation и обновлена документация.
+
 ## Stage 2. API Core (NestJS + Prisma + SQLite)
 
 - [ ] [API-001] Implement initial Prisma schema for core domain

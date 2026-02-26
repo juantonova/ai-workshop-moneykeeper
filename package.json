@@ -10,9 +10,10 @@
     "install:all": "pnpm install",
     "validate:env": "node ./scripts/validate-env.cjs",
     "healthcheck": "node ./scripts/healthcheck.cjs",
+    "healthcheck:runtime": "node ./scripts/healthcheck.cjs --runtime",
     "up:dev": "pnpm run validate:env && pnpm run healthcheck && pnpm -r --parallel dev",
-    "generate:openapi": "pnpm --filter @moneykeeper/api run generate:openapi",
-    "generate:contracts": "pnpm --filter @expense/contracts run build",
+    "generate:openapi": "pnpm --filter @moneykeeper/api run codegen:openapi",
+    "generate:contracts": "pnpm run generate:openapi && pnpm --filter @expense/contracts run build",
     "lint": "pnpm -r lint",
     "format": "pnpm -r format",
     "format:check": "pnpm -r format:check",
@@ -23,6 +24,7 @@
     "dev": "pnpm run up:dev"
   },
   "devDependencies": {
+    "dotenv": "^17.3.1",
     "eslint": "^10.0.2",
     "prettier": "^3.8.1"
   }

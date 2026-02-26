@@ -26,9 +26,10 @@
     "lint": "node -e \"console.log('contracts: lint baseline passed')\"",
     "format": "pnpm exec prettier --write \"./src/**/*.ts\" \"README.md\" \"CHANGELOG.md\"",
     "format:check": "pnpm exec prettier --check \"./src/**/*.ts\" \"README.md\" \"CHANGELOG.md\"",
-    "generate:client": "pnpm exec openapi --input ../api/openapi/openapi.json --output ./src/generated --client fetch --useUnionTypes && pnpm exec prettier --write \"./src/generated/**/*.ts\"",
+    "codegen:client": "pnpm exec openapi --input ../api/openapi/openapi.json --output ./src/generated --client fetch --useUnionTypes && pnpm exec prettier --write \"./src/generated/**/*.ts\"",
+    "generate:client": "pnpm run codegen:client",
     "set:ci-version": "node ./scripts/set-ci-version.cjs",
-    "build": "pnpm -w --filter @moneykeeper/api run generate:openapi && pnpm run generate:client && pnpm exec tsc -p tsconfig.json",
+    "build": "pnpm run codegen:client && pnpm exec tsc -p tsconfig.json",
     "test": "node --test",
     "dev": "node -e \"console.log('contracts: no dev server')\"",
     "quality": "pnpm lint && pnpm format:check && pnpm test && pnpm build"

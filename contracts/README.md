@@ -4,8 +4,8 @@ TypeScript API client, generated from `api/openapi/openapi.json`.
 
 ## Generation flow
 
-1. `api` updates OpenAPI source (`pnpm --filter @moneykeeper/api run generate:openapi`)
-2. `contracts` regenerates typed fetch client (`pnpm --filter @expense/contracts run generate:client`)
+1. `api` updates OpenAPI source (`api/openapi/openapi.source.json`) and generates artifact (`pnpm --filter @moneykeeper/api run codegen:openapi`)
+2. `contracts` regenerates typed fetch client (`pnpm --filter @expense/contracts run codegen:client`)
 3. `contracts` builds distributable artifacts into `dist/`
 
 ## Usage
@@ -31,3 +31,5 @@ const response = await TransactionsService.createTransaction({
 - `PATCH`: non-breaking fixes (descriptions/examples/docs-only changes)
 
 Breaking changes must follow the Interfaces Freeze ADR from `TECHSPEC.md`.
+
+CI can derive a deterministic patch version from `GITHUB_RUN_NUMBER`, and local overrides are supported via `CONTRACTS_VERSION`.
