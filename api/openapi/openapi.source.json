@@ -364,10 +364,87 @@
       }
     },
     "/transactions": {
-      "post": {
-        "tags": [
-          "Transactions"
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get transactions",
+        "operationId": "getTransactions",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["expense", "income", "transfer", "opening", "all"]
+            }
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "category_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "default": 50
+            }
+          }
         ],
+        "responses": {
+          "200": {
+            "description": "List of transactions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TransactionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Transactions"],
         "summary": "Create transaction",
         "operationId": "createTransaction",
         "requestBody": {
@@ -401,8 +478,156 @@
               }
             }
           },
-          "500": {
-            "description": "Internal server error",
+          "404": {
+            "description": "Account or category not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/{id}": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get transaction by id",
+        "operationId": "getTransaction",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Transaction not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Transactions"],
+        "summary": "Update transaction",
+        "operationId": "updateTransaction",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTransactionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Transaction updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or immutable transaction",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Transaction not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transactions/{id}/void": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Void transaction",
+        "operationId": "voidTransaction",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction voided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Cannot void OPENING_BALANCE or already voided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Transaction not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -437,8 +662,6 @@
         "additionalProperties": false,
         "required": [
           "type",
-          "amount",
-          "accountId",
           "occurredAtUtc"
         ],
         "properties": {
@@ -447,24 +670,83 @@
             "enum": [
               "EXPENSE",
               "INCOME",
-              "TRANSFER"
+              "TRANSFER",
+              "OPENING_BALANCE"
             ]
-          },
-          "amount": {
-            "type": "number",
-            "minimum": 0.01
-          },
-          "accountId": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "categoryId": {
-            "type": "integer",
-            "minimum": 1
           },
           "occurredAtUtc": {
             "type": "string",
             "format": "date-time"
+          },
+          "accountId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Required for EXPENSE, INCOME, OPENING_BALANCE"
+          },
+          "categoryId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Required for EXPENSE, INCOME"
+          },
+          "amount": {
+            "type": "number",
+            "minimum": 0.01,
+            "description": "Required for EXPENSE, INCOME, OPENING_BALANCE"
+          },
+          "fromAccountId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Required for TRANSFER"
+          },
+          "toAccountId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Required for TRANSFER"
+          },
+          "amountFrom": {
+            "type": "number",
+            "minimum": 0.01,
+            "description": "Required for TRANSFER"
+          },
+          "amountTo": {
+            "type": "number",
+            "minimum": 0.01,
+            "description": "Required for TRANSFER"
+          }
+        }
+      },
+      "UpdateTransactionDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "occurredAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "accountId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "For EXPENSE, INCOME"
+          },
+          "categoryId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "For EXPENSE, INCOME"
+          },
+          "amount": {
+            "type": "number",
+            "minimum": 0.01,
+            "description": "For EXPENSE, INCOME"
+          },
+          "amountFrom": {
+            "type": "number",
+            "minimum": 0.01,
+            "description": "For TRANSFER"
+          },
+          "amountTo": {
+            "type": "number",
+            "minimum": 0.01,
+            "description": "For TRANSFER"
           }
         }
       },
@@ -473,13 +755,19 @@
         "additionalProperties": false,
         "required": [
           "id",
+          "userId",
           "type",
-          "amount",
-          "accountId",
-          "occurredAtUtc"
+          "status",
+          "occurredAtUtc",
+          "createdAtUtc",
+          "updatedAtUtc"
         ],
         "properties": {
           "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "userId": {
             "type": "integer",
             "minimum": 1
           },
@@ -488,24 +776,63 @@
             "enum": [
               "EXPENSE",
               "INCOME",
-              "TRANSFER"
+              "TRANSFER",
+              "OPENING_BALANCE"
             ]
           },
-          "amount": {
-            "type": "number",
-            "minimum": 0.01
-          },
-          "accountId": {
-            "type": "integer",
-            "minimum": 1
-          },
-          "categoryId": {
-            "type": "integer",
-            "minimum": 1
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "VOID"
+            ]
           },
           "occurredAtUtc": {
             "type": "string",
             "format": "date-time"
+          },
+          "createdAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAtUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "accountId": {
+            "type": "integer",
+            "minimum": 1,
+            "nullable": true
+          },
+          "categoryId": {
+            "type": "integer",
+            "minimum": 1,
+            "nullable": true
+          },
+          "amount": {
+            "type": "string",
+            "nullable": true,
+            "description": "Decimal string with 2 decimal places"
+          },
+          "fromAccountId": {
+            "type": "integer",
+            "minimum": 1,
+            "nullable": true
+          },
+          "toAccountId": {
+            "type": "integer",
+            "minimum": 1,
+            "nullable": true
+          },
+          "amountFrom": {
+            "type": "string",
+            "nullable": true,
+            "description": "Decimal string with 2 decimal places"
+          },
+          "amountTo": {
+            "type": "string",
+            "nullable": true,
+            "description": "Decimal string with 2 decimal places"
           }
         }
       },

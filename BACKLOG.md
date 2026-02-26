@@ -59,7 +59,7 @@ Task DOD: Prisma schema и первая миграция применяются 
 Task Context: Реализуй `api/v1` endpoints для счетов и категорий (включая базовые категории и custom), валидацию DTO и error mapping.
 Task DOD: Контракты и e2e тесты подтверждают CRUD, есть автосоздание `Основная карта (RUB)` и обязательный opening balance в onboarding-потоке.
 
-- [ ] [API-003] Build transactions CRUD with type rules
+- [x] [API-003] Build transactions CRUD with type rules
 Task Context: Реализуй `Expense/Income/Transfer` с правилами PRD: transfer не влияет на income/expense аналитику, поддержка даты/времени и account/category ссылок.
 Task DOD: CRUD и валидации работают корректно, есть тесты бизнес-правил по типам транзакций и корректным статус-кодам ошибок.
 

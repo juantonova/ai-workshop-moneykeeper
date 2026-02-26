@@ -1,5 +1,36 @@
 # Changelog
 
+## 2026-02-26 — API-003
+
+- Реализован полноценный `TransactionsModule` с CRUD функционалом для всех типов транзакций:
+  - `GET /api/v1/transactions` — получение списка транзакций с фильтрами (type, date_from, date_to, category_id) и пагинацией (offset, limit max 200).
+  - `GET /api/v1/transactions/:id` — получение транзакции по ID.
+  - `POST /api/v1/transactions` — создание транзакции (EXPENSE, INCOME, TRANSFER, OPENING_BALANCE).
+  - `PATCH /api/v1/transactions/:id` — редактирование транзакции.
+  - `POST /api/v1/transactions/:id/void` — отмена транзакции (установка статуса VOID).
+- Реализованы DTO с валидацией для разных типов транзакций:
+  - `CreateTransactionDto` с условной валидацией полей в зависимости от типа транзакции.
+  - `UpdateTransactionDto` для обновления транзакций.
+  - `TransactionDto` для ответов API.
+  - `TransactionQueryDto` для параметров фильтрации.
+- Реализована бизнес-логика `TransactionsService` с валидациями согласно TECHSPEC:
+  - **EXPENSE/INCOME**: только RUB счета, обязательная категория с matching типом.
+  - **TRANSFER**: запрет перевода на тот же счёт, проверка валют (same currency → same amounts).
+  - **OPENING_BALANCE**: иммутабельность, запрет на редактирование и VOID.
+  - **Валидация update**: TRANSFER можно менять только amounts и date, EXPENSE/INCOME можно менять amount/category/account/date.
+  - Корректная обработка ошибок с специфичными кодами (ONLY_RUB_ACCOUNTS_ALLOWED, CATEGORY_TYPE_MISMATCH, SAME_ACCOUNT_TRANSFER и др.).
+- Добавлены unit-тесты для бизнес-правил с использованием Node.js test runner:
+  - Тесты валидации RUB-only для EXPENSE/INCOME.
+  - Тесты валидации TRANSFER (same account, same currency amounts).
+  - Тесты immutability OPENING_BALANCE.
+  - Тесты корректных статус-кодов ошибок.
+- Обновлён OpenAPI контракт (`api/openapi/openapi.source.json`):
+  - Добавлены все endpoints для транзакций с полной спецификацией параметров и responses.
+  - Обновлены schemas: `CreateTransactionRequestDto`, `TransactionDto`, добавлен `UpdateTransactionDto`.
+  - Поддержка всех типов транзакций (EXPENSE, INCOME, TRANSFER, OPENING_BALANCE) со всеми полями.
+- `TransactionsModule` подключен в `AppModule`.
+- Все тесты проходят, код компилируется без ошибок.
+
 ## 2026-02-26 — API-002
 
 - Реализовано полноценное NestJS приложение в `api` с TypeScript:
