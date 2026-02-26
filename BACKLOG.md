@@ -37,7 +37,7 @@ Task DOD: Dependency tree минимизирован, lockfiles обновлен
 Task Context: Вынеси повторяющиеся конфиги в shared presets (eslint/tsconfig/prettier) и сократи дубли между репозиториями.
 Task DOD: Дублирование конфигов устранено, изменения shared preset корректно применяются в каждом репозитории.
 
-- [ ] [FND-009] Stage security review: CI and package publishing hardening
+- [x] [FND-009] Stage security review: CI and package publishing hardening
 Task Context: Проверь секреты CI, права токенов GH Packages, принцип least privilege и отсутствие чувствительных данных в логах.
 Task DOD: Security checklist закрыт, лишние permissions убраны, публикация контрактов работает с минимально необходимыми правами.
 

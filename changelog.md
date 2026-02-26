@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-02-24 — FND-009
+
+- Выполнен security hardening CI и pipeline публикации пакета контрактов.
+- Для `ci` и `reusable-ci` выставлены минимальные права `contents: read` (least privilege).
+- Для `contracts-publish` добавлены:
+  - верхнеуровневый `permissions: {}`
+  - job-level права только `contents: read` и `packages: write`
+  - `concurrency` (защита от параллельных публикаций)
+  - `timeout-minutes`
+  - безопасный checkout (`persist-credentials: false`, `fetch-depth: 1`)
+  - lockfile drift check (`git diff --exit-code pnpm-lock.yaml`)
+- Добавлен security checklist: `docs/security/ci-packages-hardening-checklist.md`.
+
 ## 2026-02-24 — FND-008
 
 - Вынесены shared presets конфигов:

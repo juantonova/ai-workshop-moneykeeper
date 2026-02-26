@@ -10,16 +10,25 @@ on:
       - "pnpm-lock.yaml"
       - ".github/workflows/contracts-publish.yml"
 
-permissions:
-  contents: read
-  packages: write
+permissions: {}
+
+concurrency:
+  group: contracts-publish-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   publish-contracts:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 1
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -36,6 +45,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Verify lockfile unchanged
+        run: git diff --exit-code pnpm-lock.yaml
+
       - name: Generate OpenAPI and contracts
         run: |
           pnpm --filter @moneykeeper/api run generate:openapi
@@ -50,3 +62,4 @@ jobs:
         run: pnpm --filter @expense/contracts publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_CONFIG_LOGLEVEL: error
