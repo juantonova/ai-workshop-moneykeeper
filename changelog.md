@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-02-24 — FND-007
+
+- Проведен аудит зависимостей workspace и сервисов (`api/ui/bot/scheduler/contracts`) на предмет лишних и дублирующих пакетов.
+- Удалена неиспользуемая root devDependency `@eslint/js`; ее использование заменено локальной конфигурацией правил в `eslint.config.mjs`.
+- Обновлен lockfile после очистки dependency tree.
+- Подтверждена стабильность после cleanup: `pnpm quality` проходит полностью.
+
 ## 2026-02-24 — FND-006
 
 - Удалены временные bootstrap-заглушки из сервисов (`api/ui/bot/scheduler`) и упрощены их `src/index.js` до минимальных entrypoint-скриптов.

@@ -1,10 +1,7 @@
-import js from "@eslint/js";
-
 export default [
   {
     ignores: ["node_modules/**", "**/dist/**", "**/coverage/**"],
   },
-  js.configs.recommended,
   {
     files: ["**/*.js"],
     languageOptions: {
@@ -18,6 +15,8 @@ export default [
     },
     rules: {
       "no-console": "off",
+      "no-undef": "error",
+      "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     },
   },
 ];

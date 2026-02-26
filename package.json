@@ -22,7 +22,6 @@
     "dev": "pnpm run up:dev"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
     "eslint": "^10.0.2",
     "prettier": "^3.8.1"
   }
