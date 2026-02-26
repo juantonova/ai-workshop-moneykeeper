@@ -3,4 +3,5 @@ node_modules/
 .DS_Store
 contracts/dist/
 contracts/src/generated/
+api/dist/
 api/openapi/openapi.json
