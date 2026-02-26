@@ -1,6 +1,6 @@
 # Engineering Conventions
 
-Единые правила для `api`, `ui`, `bot`, `scheduler`.
+Единые правила для `api`, `ui`, `bot`, `scheduler`, `contracts`.
 
 ## Quality gates
 
@@ -20,6 +20,7 @@
 - `pnpm test`
 - `pnpm build`
 - `pnpm quality`
+- `pnpm ci:check` (локальная проверка, эквивалентная CI baseline)
 
 ## Formatting and linting
 

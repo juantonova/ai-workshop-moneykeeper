@@ -61,6 +61,7 @@ pnpm up:dev
 - Build all: `pnpm build`
 - Test all: `pnpm test`
 - Full quality gate: `pnpm quality`
+- Local CI-equivalent check: `pnpm ci:check`
 - Run all (parallel with env validation + healthcheck): `pnpm dev`
 
 На этапе foundation сервисы запускают минимальные entrypoint-скрипты для проверки оркестрации.
@@ -74,8 +75,9 @@ Shared presets находятся в `configs/eslint`, `configs/prettier`, `conf
 
 - Основной workflow: `.github/workflows/ci.yml`
 - Reusable template: `.github/workflows/reusable-ci.yml`
-- Для каждого пакета CI выполняет: `install`, `lint`, `test`, `build`
+- Для каждого пакета CI выполняет: `install`, `lint`, `format:check`, `test`, `build`
 - Включены:
   - matrix по Node (`20`, `22`)
   - проверка lockfile (`pnpm install --frozen-lockfile` + `git diff --exit-code pnpm-lock.yaml`)
   - upload CI report artifacts и package artifacts (для `api` и `contracts`)
+- Локальная команда для повторения CI-проверок: `pnpm ci:check`

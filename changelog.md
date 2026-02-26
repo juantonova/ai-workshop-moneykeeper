@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-02-24 — FND-010
+
+- Финально выровнены docs/scripts/CI quality gates после foundation-этапа.
+- В reusable CI добавлен шаг `format:check`, чтобы CI соответствовал заявленным quality gates.
+- Добавлен root-скрипт `pnpm ci:check` как локальный эквивалент CI baseline (`install --frozen-lockfile + quality`).
+- Обновлены `README.md` и `CONVENTIONS.md` для отражения актуального CI-flow и состава workspace-пакетов.
+
 ## 2026-02-24 — FND-009
 
 - Выполнен security hardening CI и pipeline публикации пакета контрактов.

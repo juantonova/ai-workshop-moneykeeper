@@ -19,6 +19,7 @@
     "build": "pnpm -r build",
     "test": "pnpm -r test",
     "quality": "pnpm lint && pnpm format:check && pnpm test && pnpm build",
+    "ci:check": "pnpm install --frozen-lockfile && pnpm quality",
     "dev": "pnpm run up:dev"
   },
   "devDependencies": {

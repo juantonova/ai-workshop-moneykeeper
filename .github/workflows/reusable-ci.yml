@@ -56,6 +56,9 @@ jobs:
       - name: Lint
         run: pnpm --filter ${{ inputs.package_name }} run lint
 
+      - name: Format check
+        run: pnpm --filter ${{ inputs.package_name }} run format:check
+
       - name: Test
         run: pnpm --filter ${{ inputs.package_name }} run test
 
@@ -69,7 +72,7 @@ jobs:
           package: ${{ inputs.package_name }}
           node: ${{ matrix.node }}
           lockfile: frozen and unchanged
-          stages: install, lint, test, build
+          stages: install, lint, format:check, test, build
           status: success
           EOF
 

@@ -41,7 +41,7 @@ Task DOD: Дублирование конфигов устранено, изме
 Task Context: Проверь секреты CI, права токенов GH Packages, принцип least privilege и отсутствие чувствительных данных в логах.
 Task DOD: Security checklist закрыт, лишние permissions убраны, публикация контрактов работает с минимально необходимыми правами.
 
-- [ ] [FND-010] Stage codebase hygiene: final formatting and docs alignment
+- [x] [FND-010] Stage codebase hygiene: final formatting and docs alignment
 Task Context: Приведи документацию, скрипты и quality gates к единому состоянию после foundation-этапа.
 Task DOD: Нет рассинхронизации между README/CI/scripts, линтер и форматтер проходят без исключений.
 
