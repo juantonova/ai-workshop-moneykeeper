@@ -68,6 +68,7 @@ pnpm up:dev
 ## Engineering conventions
 
 Единые правила по линтингу, форматированию, коммитам, ветвлению и naming: `CONVENTIONS.md`.
+Shared presets находятся в `configs/eslint`, `configs/prettier`, `configs/tsconfig`.
 
 ## CI
 

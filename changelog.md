@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-02-24 — FND-008
+
+- Вынесены shared presets конфигов:
+  - `configs/eslint/base.mjs`
+  - `configs/prettier/base.cjs`
+  - `configs/tsconfig/base.json`
+- Root-конфиги переведены на shared presets:
+  - `eslint.config.mjs` теперь использует `configs/eslint/base.mjs`
+  - `.prettierrc.cjs` теперь использует `configs/prettier/base.cjs`
+  - `contracts/tsconfig.json` теперь использует `extends: ../configs/tsconfig/base.json`
+- Удалены дублирующиеся `.editorconfig` в `api/ui/bot/scheduler`; оставлен единый root `.editorconfig`.
+- Обновлены `README.md` и `CONVENTIONS.md` для отражения shared preset-подхода.
+
 ## 2026-02-24 — FND-007
 
 - Проведен аудит зависимостей workspace и сервисов (`api/ui/bot/scheduler/contracts`) на предмет лишних и дублирующих пакетов.

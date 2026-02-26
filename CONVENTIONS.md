@@ -23,9 +23,10 @@
 
 ## Formatting and linting
 
-- Formatter: `prettier` (root `.prettierrc.json`)
-- Linter: `eslint` (root `eslint.config.mjs`)
-- Стиль: LF, 2 пробела, финальная новая строка (через `.editorconfig`)
+- Formatter preset: `configs/prettier/base.cjs` (root entrypoint: `.prettierrc.cjs`)
+- ESLint preset: `configs/eslint/base.mjs` (root entrypoint: `eslint.config.mjs`)
+- TS preset: `configs/tsconfig/base.json` (используется через `extends`)
+- Стиль: LF, 2 пробела, финальная новая строка (через root `.editorconfig`)
 
 ## Commit message convention
 
@@ -61,22 +62,22 @@
 
 - DTO файлы: `kebab-case` + `.dto.js`
 - DTO типы/объекты: `PascalCase`
-- Пример: `api/src/dto/create-transaction.dto.js` -> `CreateTransactionDto`
+- Пример: `create-transaction.dto.js` -> `CreateTransactionDto`
 
 ### UI (components)
 
 - Файлы компонентов: `PascalCase.js`
 - Компоненты: `PascalCase`
-- Пример: `ui/src/components/TransactionForm.js` -> `TransactionForm`
+- Пример: `TransactionForm.js` -> `TransactionForm`
 
 ### Bot (handlers)
 
 - Handler файлы: `kebab-case` + `.handler.js`
 - Функции handler: `camelCase`
-- Пример: `bot/src/handlers/create-expense.handler.js` -> `createExpenseHandler`
+- Пример: `create-expense.handler.js` -> `createExpenseHandler`
 
 ### Scheduler (jobs)
 
 - Job файлы: `kebab-case` + `.job.js`
 - Job функции: `camelCase`
-- Пример: `scheduler/src/jobs/rebuild-monthly-snapshot.job.js` -> `rebuildMonthlySnapshotJob`
+- Пример: `rebuild-monthly-snapshot.job.js` -> `rebuildMonthlySnapshotJob`

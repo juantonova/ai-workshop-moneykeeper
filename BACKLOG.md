@@ -33,7 +33,7 @@ Task DOD: В репозиториях нет bootstrap-мусора, все ос
 Task Context: Проведи аудит зависимостей во всех репозиториях и удаляй неиспользуемые/дублирующие пакеты и transitive overrides без необходимости.
 Task DOD: Dependency tree минимизирован, lockfiles обновлены, сборка и тесты зеленые.
 
-- [ ] [FND-008] Stage cleanup: eliminate duplicated configs
+- [x] [FND-008] Stage cleanup: eliminate duplicated configs
 Task Context: Вынеси повторяющиеся конфиги в shared presets (eslint/tsconfig/prettier) и сократи дубли между репозиториями.
 Task DOD: Дублирование конфигов устранено, изменения shared preset корректно применяются в каждом репозитории.
 
